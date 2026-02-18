@@ -27,10 +27,3 @@ resource "oci_identity_compartment" "database" {
     name           = "Database"
     description    = "For all database resources"
 }
-
-# Optional (Depends if Exadata Infrastructure already exists)
-resource "oci_identity_compartment" "exadata" {
-    compartment_id = oci_identity_compartment.sandbox.id
-    name           = "ExadataInfrastructure"
-    description    = "While preparing for deploying Exadata Cloud Service, customers can choose between creating a specific compartment or using the Database compartment"
-}
