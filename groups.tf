@@ -14,18 +14,6 @@ resource "oci_identity_domains_group" "security_admins" {
     display_name = "SecurityAdmins"
 }
 
-resource "oci_identity_domains_group" "appdev_admins" {
-    idcs_endpoint = data.oci_identity_domain.existing_domain.url
-    schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
-    display_name = "AppDevAdmins"
-}
-
-resource "oci_identity_domains_group" "db_admins" {
-    idcs_endpoint = data.oci_identity_domain.existing_domain.url
-    schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
-    display_name = "DBAdmins"
-}
-
 resource "oci_identity_domains_group" "team1" {
     idcs_endpoint = data.oci_identity_domain.existing_domain.url
     schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
@@ -37,3 +25,10 @@ resource "oci_identity_domains_group" "team2" {
     schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
     display_name = "Team2"
 }
+
+/**
+resource "oci_identity_domains_group" "team2" {
+    idcs_endpoint = data.oci_identity_domain.existing_domain.url
+    schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
+    display_name = "Team2"
+}**/
