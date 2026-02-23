@@ -273,7 +273,7 @@ resource "oci_identity_policy" "networkRootPolicies" {
 }
 
 # Networking Grants
-resource "oci_identiy_policy" "networkNetworkingPolicies" {
+resource "oci_identity_policy" "networkNetworkingPolicies" {
     compartment_id = oci_identity_compartment.network.id
     description = "Policies for Network Amdins to manage/read resources in Networking Compartment"
     name = "networkNetworkingPolicies"
@@ -309,7 +309,7 @@ resource "oci_identiy_policy" "networkNetworkingPolicies" {
 
 # Security Grants
 resource "oci_identity_policy" "networkSecurityPolicies" {
-    compartment_id = oci_identity_compartment.security
+    compartment_id = oci_identity_compartment.security.id
     description = "Policies for Network Amdins to manage/read resources in Security Compartment"
     name = "networkSecurityPolicies"
     statements = [
@@ -343,7 +343,7 @@ resource "oci_identity_policy" "securityRootPolicies" {
 }
 
 # Sandbox Grants
-resource "oci_identity_policy" "securityRootPolicies" {
+resource "oci_identity_policy" "securitySandboxPolicies" {
     compartment_id = oci_identity_compartment.sandbox.id
     description = "Policies for Security Amdins to manage/read resources in Sandbox compartment"
     name = "securitySandboxPolicies"
