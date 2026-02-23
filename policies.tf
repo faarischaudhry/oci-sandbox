@@ -121,6 +121,7 @@ resource "oci_identity_policy" "team1AppDevPolicies" {
 }
 
 # Root Grants
+/**
 resource "oci_identity_policy" "team1SandboxPolicies" {
     compartment_id = var.tenancy_ocid
     description = "Policies for Team 1 to manage/read resources in Sandbox Compartment"
@@ -131,6 +132,7 @@ resource "oci_identity_policy" "team1SandboxPolicies" {
         "allow group ${join(",", local.admin_groups)} to read repos in tenancy"
     ]
 }
+**/
 
 # Team 2 Policies
 
@@ -259,6 +261,7 @@ resource "oci_identity_policy" "team2SandboxPolicies" {
 # Network Policies
 
 # Root Grants
+/**
 resource "oci_identity_policy" "networkRootPolicies" {
     compartment_id = var.tenancy_ocid
     description = "Policies for Network Amdins to manage/read resources at root level"
@@ -269,6 +272,7 @@ resource "oci_identity_policy" "networkRootPolicies" {
         "allow group ${local.network_admin_group_name} to read security-attribute-namespace in tenancy"
     ]
 }
+**/
 
 # Networking Grants
 resource "oci_identity_policy" "networkNetworkingPolicies" {
@@ -322,6 +326,7 @@ resource "oci_identity_policy" "networkSecurityPolicies" {
 # Security Policies
 
 # Root Grants
+/**
 resource "oci_identity_policy" "securityRootPolicies" {
     compartment_id = var.tenancy_ocid
     description = "Policies for Security Amdins to manage/read resources at root level"
@@ -339,6 +344,7 @@ resource "oci_identity_policy" "securityRootPolicies" {
         "allow group ${local.security_admin_group_name} to manage security-attribute-namespace in tenancy"
     ]
 }
+**/
 
 # Sandbox Grants
 resource "oci_identity_policy" "securitySandboxPolicies" {
