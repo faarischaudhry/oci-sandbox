@@ -3,7 +3,7 @@ locals {
     network_compartment_name = "Networking"
     security_compartment_name = "Security"
     app_compartment_name = "ApplicationDevelopment"
-    policy_scope = "Sandbox"
+    sandbox_compartment_name = "Sandbox"
     admin_group_name_1 = "Team1"
     admin_group_name_2 = "Team2"
     network_admin_group_name = "NetworkAdmins"
@@ -352,13 +352,13 @@ resource "oci_identity_policy" "securitySandboxPolicies" {
     description = "Policies for Security Amdins to manage/read resources in Sandbox compartment"
     name = "securitySandboxPolicies"
     statements = [
-        "allow group ${local.security_admin_group_name} to manage tag-namespaces in ${local.policy_scope}",
-        "allow group ${local.security_admin_group_name} to manage tag-defaults in ${local.policy_scope}",
-        "allow group ${local.security_admin_group_name} to manage repos in ${local.policy_scope}",
-        "allow group ${local.security_admin_group_name} to read audit-events in ${local.policy_scope}",
-        "allow group ${local.security_admin_group_name} to read app-catalog-listing in ${local.policy_scope}",
-        "allow group ${local.security_admin_group_name} to read instance-images in ${local.policy_scope}",
-        "allow group ${local.security_admin_group_name} to inspect buckets in ${local.policy_scope}"
+        "allow group ${local.security_admin_group_name} to manage tag-namespaces in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.security_admin_group_name} to manage tag-defaults in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.security_admin_group_name} to manage repos in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.security_admin_group_name} to read audit-events in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.security_admin_group_name} to read app-catalog-listing in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.security_admin_group_name} to read instance-images in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.security_admin_group_name} to inspect buckets in compartment ${local.sandbox_compartment_name}"
     ]
 }
 
