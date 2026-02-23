@@ -8,7 +8,7 @@ locals {
     admin_group_name_2 = "Team2"
     network_admin_group_name = "NetworkAdmins"
     security_admin_group_name = "SecurityAdmins"
-    admin_groups = [admin_group_name_1, admin_group_name_2]
+    admin_groups = ["Team1", "Team2"]
 }
 
 # Team 1 Policies
