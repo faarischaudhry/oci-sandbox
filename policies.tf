@@ -72,7 +72,7 @@ resource "oci_identity_policy" "team1NetworkPolicies" {
 
 # DB/AppDev Admin Grants
 resource "oci_identity_policy" "team1SecurityPolicies" {
-    compartment_id = oci_identiy_compartment.security.id
+    compartment_id = oci_identity_compartment.security.id
     description = "Policies for Team 1 to manage/read resources in Security Compartment"
     name = "team1SecurityPolicies"
     statements = [
@@ -88,7 +88,7 @@ resource "oci_identity_policy" "team1SecurityPolicies" {
 
 # AppDev Admin Grants
 resource "oci_identity_policy" "team1AppDevPolicies" {
-    compartment_id = oci_identiy_compartment.appdev.id
+    compartment_id = oci_identity_compartment.appdev.id
     description = "Policies for Team 1 to manage/read resources in AppDev Compartment"
     name = "team1AppDevPolicies"
     statements = [
@@ -196,7 +196,7 @@ resource "oci_identity_policy" "team2NetworkPolicies" {
 
 # DB/AppDev Admin Grants
 resource "oci_identity_policy" "team2SecurityPolicies" {
-    compartment_id = oci_identiy_compartment.security.id
+    compartment_id = oci_identity_compartment.security.id
     description = "Policies for Team 2 to manage/read resources in Security Compartment"
     name = "team2SecurityPolicies"
     statements = [
@@ -212,7 +212,7 @@ resource "oci_identity_policy" "team2SecurityPolicies" {
 
 # AppDev Admin Grants
 resource "oci_identity_policy" "team2AppDevPolicies" {
-    compartment_id = oci_identiy_compartment.appdev.id
+    compartment_id = oci_identity_compartment.appdev.id
     description = "Policies for Team 2 to manage/read resources in AppDev Compartment"
     name = "team2AppDevPolicies"
     statements = [
