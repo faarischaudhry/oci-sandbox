@@ -266,9 +266,9 @@ resource "oci_identity_policy" "networkRootPolicies" {
     description = "Policies for Network Amdins to manage/read resources at root level"
     name = "networkRootPolicies"
     statements = [
-        "allow group ${network_admin_group_name} to read zpr-configuration in tenancy",
-        "allow group ${network_admin_group_name} to read zpr-policy in tenancy",
-        "allow group ${network_admin_group_name} to read security-attribute-namespace in tenancy"
+        "allow group ${local.network_admin_group_name} to read zpr-configuration in tenancy",
+        "allow group ${local.network_admin_group_name} to read zpr-policy in tenancy",
+        "allow group ${local.network_admin_group_name} to read security-attribute-namespace in tenancy"
     ]
 }
 
@@ -278,32 +278,32 @@ resource "oci_identity_policy" "networkNetworkingPolicies" {
     description = "Policies for Network Amdins to manage/read resources in Networking Compartment"
     name = "networkNetworkingPolicies"
     statements = [
-        "allow group ${network_admin_group_name} to read all-resources in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage virtual-network-family in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage dns in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage load-balancers in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage alarms in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage metrics in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage ons-family in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage orm-stacks in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage orm-jobs in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage orm-config-source-providers in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to read audit-events in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to read work-requests in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to read all-resources in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage virtual-network-family in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage dns in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage load-balancers in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage alarms in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage metrics in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage ons-family in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage orm-stacks in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage orm-jobs in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage orm-config-source-providers in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to read audit-events in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to read work-requests in compartment ${local.network_compartment_name}",
         # CIS 1.2 - 1.14 Level 2
-        "allow group ${network_admin_group_name} to manage instance-family in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage volume-family in compartment ${local.network_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE'}",
-        "allow group ${network_admin_group_name} to manage object-family in compartment ${local.network_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE'}",
-        "allow group ${network_admin_group_name} to manage file-family in compartment ${local.network_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT'}",
-        "allow group ${network_admin_group_name} to manage bastion-session in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage cloudevents-rules in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage alarms in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage metrics in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to read instance-agent-plugins in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage keys in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to use key-delegate in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage secret-family in compartment ${local.network_compartment_name}",
-        "allow group ${network_admin_group_name} to manage network-firewall-family in compartment ${local.network_compartment_name}"
+        "allow group ${local.network_admin_group_name} to manage instance-family in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage volume-family in compartment ${local.network_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE'}",
+        "allow group ${local.network_admin_group_name} to manage object-family in compartment ${local.network_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE'}",
+        "allow group ${local.network_admin_group_name} to manage file-family in compartment ${local.network_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT'}",
+        "allow group ${local.network_admin_group_name} to manage bastion-session in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage cloudevents-rules in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage alarms in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage metrics in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to read instance-agent-plugins in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage keys in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to use key-delegate in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage secret-family in compartment ${local.network_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage network-firewall-family in compartment ${local.network_compartment_name}"
     ]
 }
 
@@ -313,11 +313,11 @@ resource "oci_identity_policy" "networkSecurityPolicies" {
     description = "Policies for Network Amdins to manage/read resources in Security Compartment"
     name = "networkSecurityPolicies"
     statements = [
-        "allow group ${network_admin_group_name} to read vss-family in compartment ${local.security_compartment_name}",
-        "allow group ${network_admin_group_name} to use bastion in compartment ${local.security_compartment_name}",
-        "allow group ${network_admin_group_name} to manage bastion-session in compartment ${local.security_compartment_name}",
-        "allow group ${network_admin_group_name} to use vaults in compartment ${local.security_compartment_name}",
-        "allow group ${network_admin_group_name} to read logging-family in compartment ${local.security_compartment_name}"
+        "allow group ${local.network_admin_group_name} to read vss-family in compartment ${local.security_compartment_name}",
+        "allow group ${local.network_admin_group_name} to use bastion in compartment ${local.security_compartment_name}",
+        "allow group ${local.network_admin_group_name} to manage bastion-session in compartment ${local.security_compartment_name}",
+        "allow group ${local.network_admin_group_name} to use vaults in compartment ${local.security_compartment_name}",
+        "allow group ${local.network_admin_group_name} to read logging-family in compartment ${local.security_compartment_name}"
     ]
 }
 
