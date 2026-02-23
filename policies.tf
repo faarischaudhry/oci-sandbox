@@ -436,3 +436,14 @@ resource "oci_identity_policy" "securityDBPolicies" {
         "allow group ${local.security_admin_group_name} to read keys in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
     ]
 }
+
+# Future Testing
+resource "oci_identity_policy" "tag_namespace_policy" {
+    compartment_id = oci_identity_compartment.sandbox.id
+    name           = "allow-child-compartments-to-use-tags"
+    description    = "Allow AppDev and DB compartments to use team tag namespace"
+    statements = [
+        "Allow any-user to use tag-namespaces in compartment ${oci_identity_compartment.sandbox.name} where request.principal.compartment.name = '${oci_identity_compartment.appdev.name}'",
+        "Allow any-user to use tag-namespaces in compartment ${oci_identity_compartment.sandbox.name} where request.principal.compartment.name = '${oci_identity_compartment.database.name}'"
+    ]
+}
