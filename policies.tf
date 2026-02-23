@@ -122,8 +122,9 @@ resource "oci_identity_policy" "team1AppDevPolicies" {
     ]
 }
 
+# Root Grants
 resource "oci_identity_policy" "team1SandboxPolicies" {
-    compartment_id = oci_identity_compartment.sandbox.id
+    compartment_id = var.tenancy_ocid
     description = "Policies for Team 1 to manage/read resources in Sandbox Compartment"
     name = "team1SandboxPolicies"
     statements = [
@@ -245,8 +246,9 @@ resource "oci_identity_policy" "team2AppDevPolicies" {
     ]
 }
 
+# Root Grants
 resource "oci_identity_policy" "team2SandboxPolicies" {
-    compartment_id = oci_identity_compartment.sandbox.id
+    compartment_id = var.tenancy_ocid
     description = "Policies for Team 2 to manage/read resources in Sandbox Compartment"
     name = "team2SandboxPolicies"
     statements = [
