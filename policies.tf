@@ -16,7 +16,7 @@ locals {
 resource "oci_identity_policy" "team1DBPolicies" {
     compartment_id = oci_identity_compartment.database.id
     description = "Policies for Team 1 to manage/read resources in DB compartment"
-    name = "team1DBPolcies"
+    name = "team1DBPolicies"
     statements = [
         "allow group ${local.admin_group_name_1} to read all-resources in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
         "allow group ${local.admin_group_name_1} to manage db-systems in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
@@ -30,10 +30,10 @@ resource "oci_identity_policy" "team1DBPolicies" {
         "allow group ${local.admin_group_name_1} to manage metrics in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
         "allow group ${local.admin_group_name_1} to manage cloudevents-rules in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
         # CIS 1.2 - 1.14 Level 2
-        "allow group ${local.admin_group_name_1} to manage object-family in compartment ${local.database_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name = 'TEAM1',}",
+        "allow group ${local.admin_group_name_1} to manage object-family in compartment ${local.database_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name = 'TEAM1'}",
         "allow group ${local.admin_group_name_1} to manage instance-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
-        "allow group ${local.admin_group_name_1} to manage volume-family in compartment ${local.database_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name = 'TEAM1',}",
-        "allow group ${local.admin_group_name_1} to manage file-family in compartment ${local.database_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name = 'TEAM1',}",
+        "allow group ${local.admin_group_name_1} to manage volume-family in compartment ${local.database_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name = 'TEAM1'}",
+        "allow group ${local.admin_group_name_1} to manage file-family in compartment ${local.database_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name = 'TEAM1'}",
         "allow group ${local.admin_group_name_1} to manage orm-stacks in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
         "allow group ${local.admin_group_name_1} to manage orm-jobs in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
         "allow group ${local.admin_group_name_1} to manage orm-config-source-providers in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM1'",
@@ -64,8 +64,6 @@ resource "oci_identity_policy" "team1NetworkPolicies" {
         "allow group ${local.admin_group_name_1} to manage private-ips in compartment ${local.network_compartment_name}",
         "allow group ${local.admin_group_name_1} to use subnets in compartment ${local.network_compartment_name}",
         "allow group ${local.admin_group_name_1} to use network-security-groups in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use subnets in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to manage private-ips in compartment ${local.network_compartment_name}",
         "allow group ${local.admin_group_name_1} to use load-balancers in compartment ${local.network_compartment_name}"
     ]
 }
@@ -82,7 +80,6 @@ resource "oci_identity_policy" "team1SecurityPolicies" {
         "allow group ${local.admin_group_name_1} to use bastion in compartment ${local.security_compartment_name}",
         "allow group ${local.admin_group_name_1} to manage bastion-session in compartment ${local.security_compartment_name}",
         "allow group ${local.admin_group_name_1} to manage instance-images in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_1} to read logging-family in compartment ${local.security_compartment_name}"
     ]
 }
 
@@ -154,10 +151,10 @@ resource "oci_identity_policy" "team2DBPolicies" {
         "allow group ${local.admin_group_name_2} to manage metrics in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
         "allow group ${local.admin_group_name_2} to manage cloudevents-rules in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
         # CIS 2.2 - 2.24 Level 2
-        "allow group ${local.admin_group_name_2} to manage object-family in compartment ${local.database_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name = 'TEAM2',}",
+        "allow group ${local.admin_group_name_2} to manage object-family in compartment ${local.database_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name = 'TEAM2'}",
         "allow group ${local.admin_group_name_2} to manage instance-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
-        "allow group ${local.admin_group_name_2} to manage volume-family in compartment ${local.database_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name = 'TEAM2',}",
-        "allow group ${local.admin_group_name_2} to manage file-family in compartment ${local.database_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name = 'TEAM2',}",
+        "allow group ${local.admin_group_name_2} to manage volume-family in compartment ${local.database_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name = 'TEAM2'}",
+        "allow group ${local.admin_group_name_2} to manage file-family in compartment ${local.database_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name = 'TEAM2'}",
         "allow group ${local.admin_group_name_2} to manage orm-stacks in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
         "allow group ${local.admin_group_name_2} to manage orm-jobs in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
         "allow group ${local.admin_group_name_2} to manage orm-config-source-providers in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
@@ -188,8 +185,6 @@ resource "oci_identity_policy" "team2NetworkPolicies" {
         "allow group ${local.admin_group_name_2} to manage private-ips in compartment ${local.network_compartment_name}",
         "allow group ${local.admin_group_name_2} to use subnets in compartment ${local.network_compartment_name}",
         "allow group ${local.admin_group_name_2} to use network-security-groups in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_2} to use subnets in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_2} to manage private-ips in compartment ${local.network_compartment_name}",
         "allow group ${local.admin_group_name_2} to use load-balancers in compartment ${local.network_compartment_name}"
     ]
 }
@@ -206,7 +201,6 @@ resource "oci_identity_policy" "team2SecurityPolicies" {
         "allow group ${local.admin_group_name_2} to use bastion in compartment ${local.security_compartment_name}",
         "allow group ${local.admin_group_name_2} to manage bastion-session in compartment ${local.security_compartment_name}",
         "allow group ${local.admin_group_name_2} to manage instance-images in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_2} to read logging-family in compartment ${local.security_compartment_name}"
     ]
 }
 
