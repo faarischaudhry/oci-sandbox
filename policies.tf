@@ -8,6 +8,7 @@ locals {
     admin_group_name_2 = "Team2"
     network_admin_group_name = "NetworkAdmins"
     security_admin_group_name = "SecurityAdmins"
+    admin_groups = [admin_group_name_1, admin_group_name_2]
 }
 
 # Team 1 Policies
@@ -59,12 +60,12 @@ resource "oci_identity_policy" "team1NetworkPolicies" {
     description = "Policies for Team 1 to manage/read resources in Networking Compartment"
     name = "team1NetworkPolicies"
     statements = [ 
-        "allow group ${local.admin_group_name_1} to read virtual-network-family in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use vnics in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to manage private-ips in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use subnets in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use network-security-groups in compartment ${local.network_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use load-balancers in compartment ${local.network_compartment_name}"
+        "allow group ${join(",", local.admin_groups)} to read virtual-network-family in compartment ${local.network_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to use vnics in compartment ${local.network_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to manage private-ips in compartment ${local.network_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to use subnets in compartment ${local.network_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to use network-security-groups in compartment ${local.network_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to use load-balancers in compartment ${local.network_compartment_name}"
     ]
 }
 
@@ -74,12 +75,12 @@ resource "oci_identity_policy" "team1SecurityPolicies" {
     description = "Policies for Team 1 to manage/read resources in Security Compartment"
     name = "team1SecurityPolicies"
     statements = [
-        "allow group ${local.admin_group_name_1} to read vss-family in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use vaults in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_1} to read logging-family in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_1} to use bastion in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_1} to manage bastion-session in compartment ${local.security_compartment_name}",
-        "allow group ${local.admin_group_name_1} to manage instance-images in compartment ${local.security_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to read vss-family in compartment ${local.security_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to use vaults in compartment ${local.security_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to read logging-family in compartment ${local.security_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to use bastion in compartment ${local.security_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to manage bastion-session in compartment ${local.security_compartment_name}",
+        "allow group ${join(",", local.admin_groups)} to manage instance-images in compartment ${local.security_compartment_name}",
     ]
 }
 
@@ -125,9 +126,9 @@ resource "oci_identity_policy" "team1SandboxPolicies" {
     description = "Policies for Team 1 to manage/read resources in Sandbox Compartment"
     name = "team1SandboxPolicies"
     statements = [
-        "allow group ${local.admin_group_name_1} to read app-catalog-listing in tenancy",
-        "allow group ${local.admin_group_name_1} to read instance-images in tenancy",
-        "allow group ${local.admin_group_name_1} to read repos in tenancy"
+        "allow group ${join(",", local.admin_groups)} to read app-catalog-listing in tenancy",
+        "allow group ${join(",", local.admin_groups)} to read instance-images in tenancy",
+        "allow group ${join(",", local.admin_groups)} to read repos in tenancy"
     ]
 }
 
@@ -174,6 +175,7 @@ resource "oci_identity_policy" "team2DBPolicies" {
     ]
 }
 
+/**
 # DB/AppDev Admin Grants
 resource "oci_identity_policy" "team2NetworkPolicies" {
     compartment_id = oci_identity_compartment.network.id
@@ -203,6 +205,7 @@ resource "oci_identity_policy" "team2SecurityPolicies" {
         "allow group ${local.admin_group_name_2} to manage instance-images in compartment ${local.security_compartment_name}",
     ]
 }
+**/
 
 # AppDev Admin Grants
 resource "oci_identity_policy" "team2AppDevPolicies" {
@@ -240,6 +243,7 @@ resource "oci_identity_policy" "team2AppDevPolicies" {
     ]
 }
 
+/**
 # Root Grants
 resource "oci_identity_policy" "team2SandboxPolicies" {
     compartment_id = var.tenancy_ocid
@@ -250,7 +254,7 @@ resource "oci_identity_policy" "team2SandboxPolicies" {
         "allow group ${local.admin_group_name_2} to read instance-images in tenancy",
         "allow group ${local.admin_group_name_2} to read repos in tenancy"
     ]
-}
+}**/
 
 # Network Policies
 
