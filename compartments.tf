@@ -18,7 +18,7 @@ resource "oci_identity_compartment" "security" {
 
 resource "oci_identity_compartment" "appdev" {
     compartment_id = oci_identity_compartment.sandbox.id
-    name           = "Application Development"
+    name           = "ApplicationDevelopment"
     description    = "For application development related services, including Compute, Storage, Functions, Streams, API Gateway, etc"
 }
 
