@@ -19,13 +19,13 @@ resource "oci_identity_tag" "team_name" {
 resource "oci_identity_tag_default" "appdev_team_name" {
     compartment_id = oci_identity_compartment.appdev.id
     tag_definition_id = oci_identity_tag.team_name.id
-    value = "$${oci.tag.compute}"
+    value = ""
     is_required = true
 }
 
 resource "oci_identity_tag_default" "database_team_name" {
     compartment_id = oci_identity_compartment.database.id
     tag_definition_id = oci_identity_tag.team_name.id
-    value = "$${oci.tag.compute}"
+    value = ""
     is_required = true
 }
