@@ -1,4 +1,4 @@
-resource "oci_logging_log_group" "vcn_flow_logs" {
+resource "oci_logging_log_group" "vcn_flow_logs_group" {
     compartment_id = oci_identity_compartment.security.id
     display_name   = "vcn-flow-log-group"
     description    = "Log group for VCN flow logs"
@@ -6,7 +6,7 @@ resource "oci_logging_log_group" "vcn_flow_logs" {
 
 resource "oci_logging_log" "public_subnet_flow_log" {
     display_name = "public_subnet_flow_log"
-    log_group_id = oci_logging_log_group.vcn_flow_log_group.id
+    log_group_id = oci_logging_log_group.vcn_flow_logs_group.id
     log_type = "SERVICE"
     is_enabled = true
 
@@ -21,9 +21,9 @@ resource "oci_logging_log" "public_subnet_flow_log" {
     }
 }
 
-resource "oci_logging_log" "private_subent1_flow_log" {
+resource "oci_logging_log" "private_subnet1_flow_log" {
     display_name = "private_subent1_flow_log"
-    log_group_id = oci_logging_log_group.vcn_flow_log_group.id
+    log_group_id = oci_logging_log_group.vcn_flow_logs_group.id
     log_type = "SERVICE"
     is_enabled = true
 
@@ -40,7 +40,7 @@ resource "oci_logging_log" "private_subent1_flow_log" {
 
 resource "oci_logging_log" "private_subent2_flow_log" {
     display_name = "private_subent2_flow_log"
-    log_group_id = oci_logging_log_group.vcn_flow_log_group.id
+    log_group_id = oci_logging_log_group.vcn_flow_logs_group.id
     log_type = "SERVICE"
     is_enabled = true
 
@@ -69,14 +69,14 @@ resource "oci_sch_service_connector" "vcn_flow_logs_to_log_analytics" {
         kind = "logging"
         log_sources {
             compartment_id = oci_identity_compartment.security.id
-            log_group_id = oci_logging_log_group.vcn_flow_log_group.id
+            log_group_id = oci_logging_log_group.vcn_flow_logs_group.id
         }
     }
 
     target {
         kind = "loggingAnalytics"
         log_group_id = oci_log_analytics_log_analytics_log_group.vcn_flow_log_analytics_group.id
-        log_source_identifier = "OCI VCN Flow Logs"
+        log_source_identifier = "oci_vcn_flow"
     }
 }
 
