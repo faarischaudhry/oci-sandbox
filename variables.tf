@@ -62,3 +62,8 @@ variable "namespace" {
     description = "Tenancy Namespace"
     type        = string
 }
+
+variable "domain_name" {
+    description = "Name for identity domain"
+    type        = string
+}
