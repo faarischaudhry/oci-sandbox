@@ -15,3 +15,5 @@ drg_id = "ocid1.drg.oc1.phx.aaaaaaaa4b5mna6j7amzmpvxzn4pjegmtto7riyyupimhkipdmic
 domain_id = "ocid1.domain.oc1..aaaaaaaa5zbgxfbsqg2hab4vte475qim6gqwfbaetcpz5q2ebadxijipewfa"
 
 namespace = "value"
+
+domain_name = "domain-1"
