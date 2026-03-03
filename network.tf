@@ -135,3 +135,29 @@ resource "oci_core_subnet" "private_subnet_2" {
   	security_list_ids          = [oci_core_security_list.private_security_list.id]
   	availability_domain        = var.availability_domain
 }
+
+
+# Exadata
+
+resource "oci_core_subnet" "exadata_subnet" {
+	compartment_id             = oci_identity_compartment.network.id
+  	vcn_id                     = oci_core_vcn.main_vcn.id
+  	cidr_block                 = var.exadata_client_cidr
+  	display_name               = "Exadata-Client"
+  	dns_label                  = "ExadataClient"
+  	prohibit_public_ip_on_vnic = true
+  	route_table_id             = oci_core_route_table.private_route_table.id
+  	security_list_ids          = [oci_core_security_list.private_security_list.id]
+  	availability_domain        = var.availability_domain
+}
+resource "oci_core_subnet" "exabackup_subnet" {
+	compartment_id             = oci_identity_compartment.network.id
+  	vcn_id                     = oci_core_vcn.main_vcn.id
+  	cidr_block                 = var.exadata_backup_cidr
+  	display_name               = "Exadata-Backup"
+  	dns_label                  = "ExadataBackup"
+  	prohibit_public_ip_on_vnic = true
+  	route_table_id             = oci_core_route_table.private_route_table.id
+  	security_list_ids          = [oci_core_security_list.private_security_list.id]
+  	availability_domain        = var.availability_domain
+}
