@@ -73,3 +73,15 @@ variable "create_exadata_compartment" {
     type        = bool
     default     = false
 }
+
+/*
+variable "exadata_client_cidr" {
+    description = "CIDR Block for Exadata Subnet"
+    type        = string
+}
+
+variable "exadata_backup_cidr" {
+    description = "CIDR Block for Client Subnet"
+    type        = string 
+}
+*/
