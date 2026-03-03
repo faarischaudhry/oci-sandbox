@@ -68,8 +68,20 @@ variable "domain_name" {
     type        = string
 }
 
+/*
 variable "create_exadata_compartment" {
     description = "Whether to create Exadata compartment or not"
     type        = bool
     default     = false
 }
+
+variable "exadata_client_cidr" {
+    description = "CIDR Block for Exadata Subnet"
+    type        = string
+}
+
+variable "exadata_backup_cidr" {
+    description = "CIDR Block for Client Subnet"
+    type        = string 
+}
+*/

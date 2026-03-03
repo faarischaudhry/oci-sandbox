@@ -28,10 +28,11 @@ resource "oci_identity_compartment" "database" {
     description    = "For all database resources"
 }
 
+/*
 resource "oci_identity_compartment" "exadata" {
     count          = var.create_exadata_compartment ? 1 : 0
 
     compartment_id = oci_identity_compartment.sandbox.id
     name           = "Exadata"
     description    = "This is an optional compartment. While preparing for deploying Exadata Cloud Service, customers can choose between creating a specific compartment or using the Database compartment."
-}
+}*/
