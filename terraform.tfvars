@@ -18,6 +18,9 @@ exadata_client_cidr = "10.0.4.0/24"
 exadata_backup_cidr = "10.0.5.0/24"
 */
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 drg_id = "ocid1.drg.oc1.phx.aaaaaaaa4b5mna6j7amzmpvxzn4pjegmtto7riyyupimhkipdmicg34hk6za"
 

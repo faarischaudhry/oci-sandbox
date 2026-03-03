@@ -164,4 +164,7 @@ resource "oci_core_subnet" "exabackup_subnet" {
   	security_list_ids          = [oci_core_security_list.private_security_list.id]
   	availability_domain        = var.availability_domain
 }*/
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
