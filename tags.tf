@@ -12,20 +12,20 @@ resource "oci_identity_tag" "team_name" {
     is_cost_tracking = true
     validator {
         validator_type = "ENUM"
-        values = ["TEAM1", "TEAM2"]
+        values = [for name in var.group_names : upper(name)]
     }
 }
 
 resource "oci_identity_tag_default" "appdev_team_name" {
     compartment_id = oci_identity_compartment.appdev.id
     tag_definition_id = oci_identity_tag.team_name.id
-    value = "TEAM1"
+    value = ""
     is_required = true
 }
 
 resource "oci_identity_tag_default" "database_team_name" {
     compartment_id = oci_identity_compartment.database.id
     tag_definition_id = oci_identity_tag.team_name.id
-    value = "TEAM1"
+    value = ""
     is_required = true
 }
