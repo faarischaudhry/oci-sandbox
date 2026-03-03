@@ -139,6 +139,7 @@ resource "oci_core_subnet" "private_subnet_2" {
 
 # Exadata
 
+/*
 resource "oci_core_subnet" "exadata_subnet" {
 	compartment_id             = oci_identity_compartment.network.id
   	vcn_id                     = oci_core_vcn.main_vcn.id
@@ -161,3 +162,4 @@ resource "oci_core_subnet" "exabackup_subnet" {
   	security_list_ids          = [oci_core_security_list.private_security_list.id]
   	availability_domain        = var.availability_domain
 }
+*/

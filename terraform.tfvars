@@ -11,10 +11,10 @@ public_subnet_cidr = "10.0.1.0/24"
 private_subnet1_cidr = "10.0.2.0/24"
 private_subnet2_cidr = "10.0.3.0/24"
 
-
+/*
 exadata_client_cidr = "10.0.4.0/24"
 exadata_backup_cidr = "10.0.5.0/24"
-
+*/
 
 drg_id = "ocid1.drg.oc1.phx.aaaaaaaa4b5mna6j7amzmpvxzn4pjegmtto7riyyupimhkipdmicg34hk6za"
 
