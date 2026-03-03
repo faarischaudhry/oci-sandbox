@@ -67,3 +67,9 @@ variable "domain_name" {
     description = "Name for identity domain"
     type        = string
 }
+
+variable "create_exadata_compartment" {
+    description = "Whether to create Exadata compartment or not"
+    type        = bool
+    default     = false
+}
