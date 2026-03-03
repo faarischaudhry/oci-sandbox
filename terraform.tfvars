@@ -23,3 +23,5 @@ domain_id = "ocid1.domain.oc1..aaaaaaaa5zbgxfbsqg2hab4vte475qim6gqwfbaetcpz5q2eb
 namespace = "value"
 
 domain_name = "domain-1"
+
+group_names = [ "Team1", "Team2" ]

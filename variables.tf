@@ -68,6 +68,12 @@ variable "domain_name" {
     type        = string
 }
 
+variable "group_names" {
+    description = "Names for teams working within AppDev and DB"
+    type        = list(string)
+    default     = [ "Team1", "Team2" ] 
+}
+
 /*
 variable "create_exadata_compartment" {
     description = "Whether to create Exadata compartment or not"
