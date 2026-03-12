@@ -76,7 +76,7 @@ resource "oci_sch_service_connector" "vcn_flow_logs_to_log_analytics" {
     target {
         kind = "loggingAnalytics"
         log_group_id = oci_log_analytics_log_analytics_log_group.vcn_flow_log_analytics_group.id
-        log_source_identifier = "oci_vcn_flow"
+        
     }
 }
 

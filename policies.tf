@@ -445,12 +445,13 @@ resource "oci_identity_policy" "securityNetworkPolicies" {
 
 # AppDev Grants
 resource "oci_identity_policy" "securityAppDevPolicies" {
+    for_each = local.team_groups_upper
+
     compartment_id = oci_identity_compartment.appdev.id
-    description = "Policies for Security Amdins to manage/read resources in AppDev compartment"
-    name = "securityAppDevPolicies"
+    description = "Security Admins can read keys in AppDev compartment for team ${each.key}"
+    name = "securityAppDevPolicies-${each.key}"
     statements = [
-        "allow group ${local.domain_name}/${local.security_admin_group_name} to read keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${local.security_admin_group_name} to read keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
+        "allow group ${local.domain_name}/${local.security_admin_group_name} to read keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'"
     ]
 
     depends_on = [oci_identity_domains_group.groups]
@@ -458,12 +459,13 @@ resource "oci_identity_policy" "securityAppDevPolicies" {
 
 # DB Grants
 resource "oci_identity_policy" "securityDBPolicies" {
+    for_each = local.team_groups_upper
+
     compartment_id = oci_identity_compartment.database.id
-    description = "Policies for Security Amdins to manage/read resources in Database compartment"
-    name = "securityDBPolicies"
+    description = "Security Admins can read keys in Database compartment for team ${each.key}"
+    name = "securityDBPolicies-${each.key}"
     statements = [
-        "allow group ${local.domain_name}/${local.security_admin_group_name} to read keys in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${local.security_admin_group_name} to read keys in compartment ${local.database_compartment_name} where target.resource.tag.team.name= 'TEAM2'",
+        "allow group ${local.domain_name}/${local.security_admin_group_name} to read keys in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'"
     ]
 
     depends_on = [oci_identity_domains_group.groups]
