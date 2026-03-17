@@ -127,8 +127,14 @@ resource "oci_identity_policy" "teamAppDevPolicies" {
     description = "Policies for Team 1 to manage/read resources in AppDev Compartment"
     name = "${each.value}AppDevPolicies"
     statements = [
+        # all-resources
         "allow group ${local.domain_name}/${each.key} to read all-resources in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage functions-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # functions-family
+        "allow group ${local.domain_name}/${each.key} to {FN_APP_CREATE, FN_FUNCTION_CREATE} functions-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use functions-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # functions-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {FN_APP_DELETE, FN_APP_UPDATE, FN_FUNCTION_DELETE, FN_FUNCTION_UPDATE} functions-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
         
         # api-gateway-family
         "allow group ${local.domain_name}/${each.key} to {API_GATEWAY_CREATE, API_DEPLOYMENT_CREATE, API_DEFINITION_CREATE, API_CERTIFICATE_CREATE, API_SDK_CREATE, API_SUBSCRIBER_CREATE, API_USAGE_PLAN_CREATE} api-gateway-family in compartment ${local.app_compartment_name}",
@@ -148,8 +154,11 @@ resource "oci_identity_policy" "teamAppDevPolicies" {
         # streams perms included in "manage" but not "use"
         "allow group ${local.domain_name}/${each.key} to {STREAM_DELETE} streams in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
         
-        # cluster-family NOT DONE
+        # cluster-family
+        "allow group ${local.domain_name}/${each.key} to {CLUSTER_CREATE, CLUSTER_NODE_POOL_CREATE, CLUSTER_VIRTUAL_NODE_POOL_CREATE, CLUSTER_WORKLOAD_MAPPING_CREATE} cluster-family in compartment ${local.app_compartment_name}",
         "allow group ${local.domain_name}/${each.key} to use cluster-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # cluster-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {CLUSTER_DELETE, CLUSTER_UPDATE, CLUSTER_MANAGE, CLUSTER_JOIN, CLUSTER_NODE_POOL_DELETE, CLUSTER_NODE_POOL_UPDATE, CLUSTER_VIRTUAL_NODE_POOL_UPDATE, CLUSTER_VIRTUAL_NODE_POOL_DELETE, CLUSTER_WORK_REQUEST_DELETE, CLUSTER_WORKLOAD_MAPPING_DELETE} cluster-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
         
         # alarms
         "allow group ${local.domain_name}/${each.key} to {ALARM_CREATE} alarms in compartment ${local.app_compartment_name}",
@@ -172,8 +181,16 @@ resource "oci_identity_policy" "teamAppDevPolicies" {
         # all instance-family perms included in "manage" but not "use"
         "allow group ${local.domain_name}/${each.key} to {INSTANCE_DELETE, INSTANCE_ATTACH_SECONDARY_VNIC, INSTANCE_DETACH_SECONDARY_VNIC, CONSOLE_HISTORY_CREATE, CONSOLE_HISTORY_DELETE, INSTANCE_CONSOLE_CONNECTION_CREATE, INSTANCE_CONSOLE_CONNECTION_DELETE, INSTANCE_IMAGE_DELETE, INSTANCE_IMAGE_MOVE, APP_CATALOG_LISTING_SUBSCRIBE, VOLUME_ATTACHMENT_DELETE} instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'",
 
+
         # CIS 1.2 - 1.14 Level 2
-        "allow group ${local.domain_name}/${each.key} to manage volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
+
+        # volume-family
+        "allow group ${local.domain_name}/${each.key} to {VOLUME_CREATE, VOLUME_ATTACHMENT_CREATE, VOLUME_BACKUP_CREATE, BOOT_VOLUME_BACKUP_CREATE, BACKUP_POLICIES_CREATE, BACKUP_POLICY_ASSIGNMENT_CREATE, VOLUME_GROUP_CREATE, VOLUME_GROUP_BACKUP_CREATE} volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE'}",
+        "allow group ${local.domain_name}/${each.key} to use volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
+        # volume-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {VOLUME_DELETE, VOLUME_MOVE, VOLUME_ATTACHMENT_DELETE, VOLUME_BACKUP_DELETE, VOLUME_BACKUP_MOVE, BOOT_VOLUME_BACKUP_DELETE, BOOT_VOLUME_BACKUP_MOVE, BACKUP_POLICIES_DELETE, BACKUP_POLICY_ASSIGNMENT_DELETE, VOLUME_GROUP_UPDATE, VOLUME_GROUP_DELETE, VOLUME_GROUP_MOVE, VOLUME_GROUP_BACKUP_UPDATE, VOLUME_GROUP_BACKUP_DELETE, VOLUME_GROUP_BACKUP_MOVE} volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
+
+        # NOT UPDATED YET
         "allow group ${local.domain_name}/${each.key} to manage object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
         "allow group ${local.domain_name}/${each.key} to manage file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name= '${each.value}'}",
         "allow group ${local.domain_name}/${each.key} to manage repos in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
@@ -227,7 +244,7 @@ resource "oci_identity_policy" "team2SandboxPolicies" {
 /**
 resource "oci_identity_policy" "networkRootPolicies" {
     compartment_id = var.tenancy_ocid
-    description = "Policies for Network Amdins to manage/read resources at root level"
+    description = "Policies for Network Admins to manage/read resources at root level"
     name = "networkRootPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.network_admin_group_name} to read zpr-configuration in tenancy",
@@ -240,7 +257,7 @@ resource "oci_identity_policy" "networkRootPolicies" {
 # Networking Grants
 resource "oci_identity_policy" "networkNetworkingPolicies" {
     compartment_id = oci_identity_compartment.network.id
-    description = "Policies for Network Amdins to manage/read resources in Networking Compartment"
+    description = "Policies for Network Admins to manage/read resources in Networking Compartment"
     name = "networkNetworkingPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.network_admin_group_name} to read all-resources in compartment ${local.network_compartment_name}",
@@ -277,7 +294,7 @@ resource "oci_identity_policy" "networkNetworkingPolicies" {
 # Security Grants
 resource "oci_identity_policy" "networkSecurityPolicies" {
     compartment_id = oci_identity_compartment.security.id
-    description = "Policies for Network Amdins to manage/read resources in Security Compartment"
+    description = "Policies for Network Admins to manage/read resources in Security Compartment"
     name = "networkSecurityPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.network_admin_group_name} to read vss-family in compartment ${local.security_compartment_name}",
@@ -296,7 +313,7 @@ resource "oci_identity_policy" "networkSecurityPolicies" {
 /**
 resource "oci_identity_policy" "securityRootPolicies" {
     compartment_id = var.tenancy_ocid
-    description = "Policies for Security Amdins to manage/read resources at root level"
+    description = "Policies for Security Admins to manage/read resources at root level"
     name = "securityRootPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.security_admin_group_name} to manage cloudevents-rules in tenancy",
@@ -316,7 +333,7 @@ resource "oci_identity_policy" "securityRootPolicies" {
 # Sandbox Grants
 resource "oci_identity_policy" "securitySandboxPolicies" {
     compartment_id = oci_identity_compartment.sandbox.id
-    description = "Policies for Security Amdins to manage/read resources in Sandbox compartment"
+    description = "Policies for Security Admins to manage/read resources in Sandbox compartment"
     name = "securitySandboxPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.security_admin_group_name} to manage tag-namespaces in compartment ${local.sandbox_compartment_name}",
@@ -334,7 +351,7 @@ resource "oci_identity_policy" "securitySandboxPolicies" {
 # Security Grants
 resource "oci_identity_policy" "securitySecurityPolicies" {
     compartment_id = oci_identity_compartment.security.id
-    description = "Policies for Security Amdins to manage/read resources in Security compartment"
+    description = "Policies for Security Admins to manage/read resources in Security compartment"
     name = "securitySecurityPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.security_admin_group_name} to read all-resources in compartment ${local.security_compartment_name}",
@@ -373,7 +390,7 @@ resource "oci_identity_policy" "securitySecurityPolicies" {
 # Network Grants
 resource "oci_identity_policy" "securityNetworkPolicies" {
     compartment_id = oci_identity_compartment.network.id
-    description = "Policies for Security Amdins to manage/read resources in Network compartment"
+    description = "Policies for Security Admins to manage/read resources in Network compartment"
     name = "securityNetworkPolicies"
     statements = [
         "allow group ${local.domain_name}/${local.security_admin_group_name} to read virtual-network-family in compartment ${local.network_compartment_name}",
