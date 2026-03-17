@@ -129,14 +129,49 @@ resource "oci_identity_policy" "teamAppDevPolicies" {
     statements = [
         "allow group ${local.domain_name}/${each.key} to read all-resources in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
         "allow group ${local.domain_name}/${each.key} to manage functions-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage api-gateway-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage ons-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage streams in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage cluster-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage alarms in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # api-gateway-family
+        "allow group ${local.domain_name}/${each.key} to {API_GATEWAY_CREATE, API_DEPLOYMENT_CREATE, API_DEFINITION_CREATE, API_CERTIFICATE_CREATE, API_SDK_CREATE, API_SUBSCRIBER_CREATE, API_USAGE_PLAN_CREATE} api-gateway-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use api-gateway-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # api-gateway-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {API_GATEWAY_DELETE, API_GATEWAY_UPDATE, API_GATEWAY_MOVE, API_DEPLOYMENT_DELETE, API_DEPLOYMENT_MOVE, API_DEFINITION_DELETE, API_CERTIFICATE_DELETE, API_CERTIFICATE_UPDATE, API_CERTIFICATE_MOVE, API_SDK_DELETE, API_SUBSCRIBER_CREATE, API_SUBSCRIBER_DELETE, API_SUBSCRIBER_MOVE, API_USAGE_PLAN_DELETE, API_USAGE_PLAN_MOVE} api-gateway-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # ons-family
+        "allow group ${local.domain_name}/${each.key} to {ONS_TOPIC_CREATE} ons-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use ons-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # ons-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {ONS_TOPIC_MOVE, ONS_TOPIC_UPDATE, ONS_TOPIC_DELETE, ONS_SUBSCRIPTION_MOVE, ONS_TOPIC_SUBSCRIBE} ons-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # streams
+        "allow group ${local.domain_name}/${each.key} to {STREAM_CREATE} streams in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use streams in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # streams perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {STREAM_DELETE} streams in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # cluster-family NOT DONE
+        "allow group ${local.domain_name}/${each.key} to use cluster-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # alarms
+        "allow group ${local.domain_name}/${each.key} to {ALARM_CREATE} alarms in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use alarms in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # all alarms perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {ALARM_UPDATE, ALARM_DELETE, ALARM_MOVE} alarms in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",   
+
+        # metrics
         "allow group ${local.domain_name}/${each.key} to manage metrics in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage logging-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage instance-family in compartment ${local.app_compartment_name}",
+        
+        # logging-family
+        "allow group ${local.domain_name}/${each.key} to {LOG_GROUP_CREATE, UNIFIED_AGENT_CONFIG_CREATE} logging-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use logging-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # all logging-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {LOG_GROUP_DELETE, UNIFIED_AGENT_CONFIG_DELETE} logging-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # instance-family
+        "allow group ${local.domain_name}/${each.key} to {INSTANCE_CREATE, INSTANCE_IMAGE_CREATE, CONSOLE_HISTORY_CREATE, INSTANCE_CONSOLE_CONNECTION_CREATE, VOLUME_ATTACHMENT_CREATE} instance-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'",
+        # all instance-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {INSTANCE_DELETE, INSTANCE_ATTACH_SECONDARY_VNIC, INSTANCE_DETACH_SECONDARY_VNIC, CONSOLE_HISTORY_CREATE, CONSOLE_HISTORY_DELETE, INSTANCE_CONSOLE_CONNECTION_CREATE, INSTANCE_CONSOLE_CONNECTION_DELETE, INSTANCE_IMAGE_DELETE, INSTANCE_IMAGE_MOVE, APP_CATALOG_LISTING_SUBSCRIBE, VOLUME_ATTACHMENT_DELETE} instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'",
+
         # CIS 1.2 - 1.14 Level 2
         "allow group ${local.domain_name}/${each.key} to manage volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
         "allow group ${local.domain_name}/${each.key} to manage object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
