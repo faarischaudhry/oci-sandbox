@@ -1,6 +1,13 @@
 resource "oci_identity_tag_namespace" "team_tags" {
     compartment_id = oci_identity_compartment.sandbox.id
-    name = "team"
+    name = "team1"
+    description = "Team-based tags for resource ownership and access control"
+    is_retired = false
+}
+
+resource "oci_identity_tag_namespace" "team_tags" {
+    compartment_id = oci_identity_compartment.sandbox.id
+    name = "team2"
     description = "Team-based tags for resource ownership and access control"
     is_retired = false
 }
