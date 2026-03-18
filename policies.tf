@@ -24,11 +24,11 @@ resource "oci_identity_policy" "basicTenancyPermissions" {
     description    = "Basic tenancy permissions for ${each.key}"
     name           = "basicPermissions-${each.key}"
     statements = [
-        "allow group ${local.domain_name}/${each.key} to use cloud-shell in ${local.sandbox_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to read usage-budgets in ${local.sandbox_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to read usage-reports in ${local.sandbox_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to read objectstorage-namespaces in ${local.sandbox_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to read tag-namespaces in ${local.sandbox_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use cloud-shell in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to read usage-budgets in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to read usage-reports in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to read objectstorage-namespaces in compartment ${local.sandbox_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to read tag-namespaces in compartment ${local.sandbox_compartment_name}",
     ]
 
     depends_on = [oci_identity_domains_group.groups]
