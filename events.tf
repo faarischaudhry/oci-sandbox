@@ -594,11 +594,7 @@ resource "oci_events_rule" "service_rules"{
     {actions
       {action_type="ONS"
       is_enabled=true
-<<<<<<< HEAD
-      topic_id="DNF"
-=======
       topic_id=oci_ons_notification_topic.test_notification_topic.id
->>>>>>> AB
       description = "${each.key} event"
       }
   }
