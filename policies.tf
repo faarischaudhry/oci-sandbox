@@ -44,37 +44,151 @@ resource "oci_identity_policy" "teamDBPolicies" {
     description = "Policies for ${each.key} to manage/read resources in DB compartment"
     name = "${each.key}DBPolicies"
     statements = [
+        # all-resources
         "allow group ${local.domain_name}/${each.key} to read all-resources in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage db-systems in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage db-nodes in compartment ${local.database_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to manage db-homes in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage databases in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage pluggable-databases in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage db-backups in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage autonomous-database-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage alarms in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage metrics in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage cloudevents-rules in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # db-systems
+        "allow group ${local.domain_name}/${each.key} to {DB_SYSTEM_CREATE} db-systems in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use db-systems in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # db-systems perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {DB_SYSTEM_DELETE} db-systems in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # db-nodes
+        "allow group ${local.domain_name}/${each.key} to manage db-nodes in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # db-homes
+        "allow group ${local.domain_name}/${each.key} to {DB_HOME_CREATE} db-homes in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use db-homes in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # db-homes perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {DB_HOME_DELETE} db-homes in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # databases
+        "allow group ${local.domain_name}/${each.key} to {DATABASE_CREATE} databases in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use databases in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # databases perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {DATABASE_DELETE} databases in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # pluggable-databases
+        "allow group ${local.domain_name}/${each.key} to {PLUGGABLE_DATABASE_CREATE} pluggable-databases in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use pluggable-databases in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # pluggable-databases perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {PLUGGABLE_DATABASE_DELETE} pluggable-databases in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # db-backups
+        "allow group ${local.domain_name}/${each.key} to {DB_BACKUP_CREATE} db-backups in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use db-backups in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # db-backups perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {DB_BACKUP_DELETE} db-backups in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # autonomous-database-family
+        "allow group ${local.domain_name}/${each.key} to {AUTONOMOUS_DATABASE_CREATE} autonomous-database-family in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use autonomous-database-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # autonomous-database-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {AUTONOMOUS_DATABASE_DELETE, NETWORK_SECURITY_GROUP_UPDATE_MEMBERS} autonomous-database-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # alarms
+        "allow group ${local.domain_name}/${each.key} to {ALARM_CREATE} alarms in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use alarms in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # all alarms perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {ALARM_UPDATE, ALARM_DELETE, ALARM_MOVE} alarms in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",   
+
+        # metrics
+        "allow group ${local.domain_name}/${each.key} to manage metrics in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # cloudevents-rules
+        "allow group ${local.domain_name}/${each.key} to {EVENTRULE_CREATE} cloudevents-rules in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use cloudevents-rules in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # cloudevents-rules perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {EVENTRULE_DELETE, EVENTRULE_MODIFY} cloudevents-rules in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+
         # CIS 1.2 - 1.14 Level 2
-        "allow group ${local.domain_name}/${each.key} to manage object-family in compartment ${local.database_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name = '${each.value}'}",
-        "allow group ${local.domain_name}/${each.key} to manage instance-family in compartment ${local.database_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to manage volume-family in compartment ${local.database_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name = '${each.value}'}",
-        "allow group ${local.domain_name}/${each.key} to manage file-family in compartment ${local.database_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name = '${each.value}'}",
-        "allow group ${local.domain_name}/${each.key} to manage orm-stacks in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage orm-jobs in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage orm-config-source-providers in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage ons-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage logging-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # object-family
+        "allow group ${local.domain_name}/${each.key} to {BUCKET_CREATE, OBJECT_CREATE} object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE'}",
+        "allow group ${local.domain_name}/${each.key} to use object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
+        "allow group ${local.domain_name}/${each.key} to manage objectstorage-namespaces in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE'}",
+        # object-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {BUCKET_DELETE, PAR_MANAGE, RETENTION_RULE_MANAGE, RETENTION_RULE_LOCK, OBJECT_DELETE, OBJECT_VERSION_DELETE, OBJECT_RESTORE, OBJECT_UPDATE_TIER} object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
+        
+        # instance-family
+        "allow group ${local.domain_name}/${each.key} to {INSTANCE_CREATE, INSTANCE_IMAGE_CREATE, CONSOLE_HISTORY_CREATE, INSTANCE_CONSOLE_CONNECTION_CREATE, VOLUME_ATTACHMENT_CREATE} instance-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'",
+        # all instance-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {INSTANCE_DELETE, INSTANCE_ATTACH_SECONDARY_VNIC, INSTANCE_DETACH_SECONDARY_VNIC, CONSOLE_HISTORY_CREATE, CONSOLE_HISTORY_DELETE, INSTANCE_CONSOLE_CONNECTION_CREATE, INSTANCE_CONSOLE_CONNECTION_DELETE, INSTANCE_IMAGE_DELETE, INSTANCE_IMAGE_MOVE, APP_CATALOG_LISTING_SUBSCRIBE, VOLUME_ATTACHMENT_DELETE} instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'",
+        
+        # volume-family
+        "allow group ${local.domain_name}/${each.key} to {VOLUME_CREATE, VOLUME_ATTACHMENT_CREATE, VOLUME_BACKUP_CREATE, BOOT_VOLUME_BACKUP_CREATE, BACKUP_POLICIES_CREATE, BACKUP_POLICY_ASSIGNMENT_CREATE, VOLUME_GROUP_CREATE, VOLUME_GROUP_BACKUP_CREATE} volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE'}",
+        "allow group ${local.domain_name}/${each.key} to use volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
+        # volume-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {VOLUME_DELETE, VOLUME_MOVE, VOLUME_ATTACHMENT_DELETE, VOLUME_BACKUP_DELETE, VOLUME_BACKUP_MOVE, BOOT_VOLUME_BACKUP_DELETE, BOOT_VOLUME_BACKUP_MOVE, BACKUP_POLICIES_DELETE, BACKUP_POLICY_ASSIGNMENT_DELETE, VOLUME_GROUP_UPDATE, VOLUME_GROUP_DELETE, VOLUME_GROUP_MOVE, VOLUME_GROUP_BACKUP_UPDATE, VOLUME_GROUP_BACKUP_DELETE, VOLUME_GROUP_BACKUP_MOVE} volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
+
+        # file-family
+        "allow group ${local.domain_name}/${each.key} to {EXPORT_SET_CREATE, FILE_SYSTEM_CREATE, FILESYSTEM_SNAPSHOT_POLICY_CREATE, MOUNT_TARGET_CREATE, OUTBOUND_CONNECTOR_CREATE, REPLICATION_CREATE} file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT'}",
+        "allow group ${local.domain_name}/${each.key} to use file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name= '${each.value}'}",
+        # file-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {EXPORT_SET_UPDATE, EXPORT_SET_DELETE, FILE_SYSTEM_UPDATE, FILE_SYSTEM_DELETE, FILE_SYSTEM_MOVE, FILE_SYSTEM_CREATE_SNAPSHOT, FILE_SYSTEM_DELETE_SNAPSHOT, FILE_SYSTEM_CLONE, FILE_SYSTEM_REPLICATION_TARGET, FILESYSTEM_SNAPSHOT_POLICY_UPDATE, FILESYSTEM_SNAPSHOT_POLICY_MOVE, FILESYSTEM_SNAPSHOT_POLICY_DELETE, MOUNT_TARGET_UPDATE, MOUNT_TARGET_SHAPE_UPGRADE, MOUNT_TARGET_SHAPE_DOWNGRADE, MOUNT_TARGET_DELETE, MOUNT_TARGET_MOVE, OUTBOUND_CONNECTOR_UPDATE, OUTBOUND_CONNECTOR_DELETE, OUTBOUND_CONNECTOR_MOVE, REPLICATION_UPDATE, REPLICATION_DELETE, REPLICATION_MOVE} file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name= '${each.value}'}",
+
+        # orm-stacks
+        "allow group ${local.domain_name}/${each.key} to {ORM_STACK_CREATE} orm-stacks in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use orm-stacks in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        "allow group ${local.domain_name}/${each.key} to {ORM_STACK_UPDATE, ORM_STACK_MOVE, ORM_STACK_DELETE} orm-stacks in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # orm-jobs
+        "allow group ${local.domain_name}/${each.key} to manage orm-jobs in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # orm-config-source-providers
+        "allow group ${local.domain_name}/${each.key} to {ORM_CONFIG_SOURCE_PROVIDER_CREATE} orm-config-source-providers in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use orm-config-source-providers in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # orm-config-source-providers perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {ORM_CONFIG_SOURCE_PROVIDER_UPDATE, ORM_CONFIG_SOURCE_PROVIDER_MOVE, ORM_CONFIG_SOURCE_PROVIDER_DELETE} orm-config-source-providers in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # ons-family
+        "allow group ${local.domain_name}/${each.key} to {ONS_TOPIC_CREATE} ons-family in compartment ${local.database_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use ons-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # ons-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {ONS_TOPIC_MOVE, ONS_TOPIC_UPDATE, ONS_TOPIC_DELETE} ons-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # logging-family
+        "allow group ${local.domain_name}/${each.key} to {LOG_GROUP_CREATE, UNIFIED_AGENT_CONFIG_CREATE} logging-family in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use logging-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # all logging-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {LOG_GROUP_DELETE, UNIFIED_AGENT_CONFIG_DELETE} logging-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+       
+        # audit-events
         "allow group ${local.domain_name}/${each.key} to read audit-events in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # work-requests
         "allow group ${local.domain_name}/${each.key} to read work-requests in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage bastion-session in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # bastion-session
+        "allow group ${local.domain_name}/${each.key} to manage bastion-session in compartment ${local.database_compartment_name}",
+
+        # instance-agent-plugins
         "allow group ${local.domain_name}/${each.key} to read instance-agent-plugins in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage data-safe-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # data-safe-family NO INFO IN DOCS
+        "allow group ${local.domain_name}/${each.key} to manage data-safe-family in compartment ${local.database_compartment_name}",
+        
+        # vnics
         "allow group ${local.domain_name}/${each.key} to use vnics in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage keys in compartment ${local.database_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to use key-delegate in compartment ${local.database_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to manage secret-family in compartment ${local.database_compartment_name}",
+        
+        # keys
+        "allow group ${local.domain_name}/${each.key} to {KEY_CREATE} keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        "allow group ${local.domain_name}/${each.key} to use keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # keys perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {KEY_UPDATE, KEY_ROTATE, KEY_DELETE, KEY_MOVE, KEY_IMPORT, KEY_BACKUP, KEY_RESTORE} keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+       
+        # key-delegate
+        "allow group ${local.domain_name}/${each.key} to use key-delegate in compartment ${local.app_compartment_name}",
+        
+        # secret-family
+        "allow group ${local.domain_name}/${each.key} to manage secret-family in compartment ${local.app_compartment_name}",
+
+        # autonomous-database-family
         "allow group ${local.domain_name}/${each.key} to read autonomous-database-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # database-family
         "allow group ${local.domain_name}/${each.key} to read database-family in compartment ${local.database_compartment_name} where target.resource.tag.team.name= '${each.value}'"
     ]
 
@@ -190,21 +304,69 @@ resource "oci_identity_policy" "teamAppDevPolicies" {
         # volume-family perms included in "manage" but not "use"
         "allow group ${local.domain_name}/${each.key} to {VOLUME_DELETE, VOLUME_MOVE, VOLUME_ATTACHMENT_DELETE, VOLUME_BACKUP_DELETE, VOLUME_BACKUP_MOVE, BOOT_VOLUME_BACKUP_DELETE, BOOT_VOLUME_BACKUP_MOVE, BACKUP_POLICIES_DELETE, BACKUP_POLICY_ASSIGNMENT_DELETE, VOLUME_GROUP_UPDATE, VOLUME_GROUP_DELETE, VOLUME_GROUP_MOVE, VOLUME_GROUP_BACKUP_UPDATE, VOLUME_GROUP_BACKUP_DELETE, VOLUME_GROUP_BACKUP_MOVE} volume-family in compartment ${local.app_compartment_name} where all{request.permission != 'VOLUME_BACKUP_DELETE', request.permission != 'VOLUME_DELETE', request.permission != 'BOOT_VOLUME_BACKUP_DELETE', target.resource.tag.team.name= '${each.value}'}",
 
-        # NOT UPDATED YET
-        "allow group ${local.domain_name}/${each.key} to manage object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
-        "allow group ${local.domain_name}/${each.key} to manage file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name= '${each.value}'}",
-        "allow group ${local.domain_name}/${each.key} to manage repos in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage orm-stacks in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # object-family
+        "allow group ${local.domain_name}/${each.key} to {BUCKET_CREATE, OBJECT_CREATE} object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE'}",
+        "allow group ${local.domain_name}/${each.key} to use object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
+        "allow group ${local.domain_name}/${each.key} to manage objectstorage-namespaces in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE'}",
+        # object-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {BUCKET_DELETE, PAR_MANAGE, RETENTION_RULE_MANAGE, RETENTION_RULE_LOCK, OBJECT_DELETE, OBJECT_VERSION_DELETE, OBJECT_RESTORE, OBJECT_UPDATE_TIER} object-family in compartment ${local.app_compartment_name} where all{request.permission != 'OBJECT_DELETE', request.permission != 'BUCKET_DELETE', target.resource.tag.team.name= '${each.value}'}",
+
+        # file-family
+        "allow group ${local.domain_name}/${each.key} to {EXPORT_SET_CREATE, FILE_SYSTEM_CREATE, FILESYSTEM_SNAPSHOT_POLICY_CREATE, MOUNT_TARGET_CREATE, OUTBOUND_CONNECTOR_CREATE, REPLICATION_CREATE} file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT'}",
+        "allow group ${local.domain_name}/${each.key} to use file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name= '${each.value}'}",
+        # file-family perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {EXPORT_SET_UPDATE, EXPORT_SET_DELETE, FILE_SYSTEM_UPDATE, FILE_SYSTEM_DELETE, FILE_SYSTEM_MOVE, FILE_SYSTEM_CREATE_SNAPSHOT, FILE_SYSTEM_DELETE_SNAPSHOT, FILE_SYSTEM_CLONE, FILE_SYSTEM_REPLICATION_TARGET, FILESYSTEM_SNAPSHOT_POLICY_UPDATE, FILESYSTEM_SNAPSHOT_POLICY_MOVE, FILESYSTEM_SNAPSHOT_POLICY_DELETE, MOUNT_TARGET_UPDATE, MOUNT_TARGET_SHAPE_UPGRADE, MOUNT_TARGET_SHAPE_DOWNGRADE, MOUNT_TARGET_DELETE, MOUNT_TARGET_MOVE, OUTBOUND_CONNECTOR_UPDATE, OUTBOUND_CONNECTOR_DELETE, OUTBOUND_CONNECTOR_MOVE, REPLICATION_UPDATE, REPLICATION_DELETE, REPLICATION_MOVE} file-family in compartment ${local.app_compartment_name} where all{request.permission != 'FILE_SYSTEM_DELETE', request.permission != 'MOUNT_TARGET_DELETE', request.permission != 'EXPORT_SET_DELETE', request.permission != 'FILE_SYSTEM_DELETE_SNAPSHOT', request.permission != 'FILE_SYSTEM_NFSv3_UNEXPORT', target.resource.tag.team.name= '${each.value}'}",
+
+        # repos
+        "allow group ${local.domain_name}/${each.key} to {REPOSITORY_CREATE} repos in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use repos in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        "allow group ${local.domain_name}/${each.key} to {REPOSITORY_DELETE, REPOSITORY_UPDATE, REPOSITORY_MANAGE} repos in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # orm-stacks
+        "allow group ${local.domain_name}/${each.key} to {ORM_STACK_CREATE} orm-stacks in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use orm-stacks in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        "allow group ${local.domain_name}/${each.key} to {ORM_STACK_UPDATE, ORM_STACK_MOVE, ORM_STACK_DELETE} orm-stacks in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # orm-jobs
         "allow group ${local.domain_name}/${each.key} to manage orm-jobs in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
-        "allow group ${local.domain_name}/${each.key} to manage orm-config-source-providers in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # orm-config-source-providers
+        "allow group ${local.domain_name}/${each.key} to {ORM_CONFIG_SOURCE_PROVIDER_CREATE} orm-config-source-providers in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use orm-config-source-providers in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # orm-config-source-providers perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {ORM_CONFIG_SOURCE_PROVIDER_UPDATE, ORM_CONFIG_SOURCE_PROVIDER_MOVE, ORM_CONFIG_SOURCE_PROVIDER_DELETE} orm-config-source-providers in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # audit-events
         "allow group ${local.domain_name}/${each.key} to read audit-events in compartment ${local.app_compartment_name}",
+
+        # work-requests
         "allow group ${local.domain_name}/${each.key} to read work-requests in compartment ${local.app_compartment_name}",
+
+        # bastion-session
         "allow group ${local.domain_name}/${each.key} to manage bastion-session in compartment ${local.app_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to manage cloudevents-rules in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+
+        # cloudevents-rules
+        "allow group ${local.domain_name}/${each.key} to {EVENTRULE_CREATE} cloudevents-rules in compartment ${local.app_compartment_name}",
+        "allow group ${local.domain_name}/${each.key} to use cloudevents-rules in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # cloudevents-rules perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {EVENTRULE_DELETE, EVENTRULE_MODIFY} cloudevents-rules in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # instance-agent-plugins
         "allow group ${local.domain_name}/${each.key} to read instance-agent-plugins in compartment ${local.app_compartment_name}",
-        "allow group ${local.domain_name}/${each.key} to manage keys in compartment ${local.app_compartment_name}",
+
+        # keys
+        "allow group ${local.domain_name}/${each.key} to {KEY_CREATE} keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        "allow group ${local.domain_name}/${each.key} to use keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        # keys perms included in "manage" but not "use"
+        "allow group ${local.domain_name}/${each.key} to {KEY_UPDATE, KEY_ROTATE, KEY_DELETE, KEY_MOVE, KEY_IMPORT, KEY_BACKUP, KEY_RESTORE} keys in compartment ${local.app_compartment_name} where target.resource.tag.team.name= '${each.value}'",
+        
+        # key-delegate
         "allow group ${local.domain_name}/${each.key} to use key-delegate in compartment ${local.app_compartment_name}",
+        
+        # secret-family
         "allow group ${local.domain_name}/${each.key} to manage secret-family in compartment ${local.app_compartment_name}",
+        
+        # vnics
         "allow group ${local.domain_name}/${each.key} to use vnics in compartment ${local.app_compartment_name}"
     ]
 
