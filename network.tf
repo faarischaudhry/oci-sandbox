@@ -245,11 +245,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
     protocol = "all"
 
     description = "The first rule is recommended and enables the Oracle Notification Services (ONS) to communicate about Fast Application Notification (FAN) events."
-  }
-
-  
-  
-  
+  }  
 }
 
 resource "oci_core_security_list" "exadata__backup_security_list" {
