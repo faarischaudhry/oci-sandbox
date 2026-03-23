@@ -115,7 +115,7 @@ resource "oci_core_subnet" "public_subnet" {
 }
 
 resource "oci_core_subnet" "private_subnet_1" {
-	compartment_id             = oci_identity_compartment.network.id
+	  compartment_id             = oci_identity_compartment.network.id
   	vcn_id                     = oci_core_vcn.main_vcn.id
   	cidr_block                 = var.private_subnet1_cidr
   	display_name               = "private-subnet-1-dev"
@@ -245,11 +245,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
     protocol = "all"
 
     description = "The first rule is recommended and enables the Oracle Notification Services (ONS) to communicate about Fast Application Notification (FAN) events."
-  }
-
-  
-  
-  
+  }  
 }
 
 resource "oci_core_security_list" "exadata__backup_security_list" {
