@@ -85,3 +85,27 @@ variable "create_nat_gateway" {
     type        = bool
     default     = true
 }
+
+variable "create_exadata_subnets" {
+    description = "Whether to create Exadata client and backup subnets."
+    type        = bool
+    default     = false
+}
+
+variable "exadata_client_subnet_cidr" {
+    description = "CIDR block for the Exadata client subnet. Required if create_exadata_subnets is true."
+    type        = string
+    default     = null
+}
+
+variable "exadata_backup_subnet_cidr" {
+    description = "CIDR block for the Exadata backup subnet. Required if create_exadata_subnets is true."
+    type        = string
+    default     = null
+}
+
+variable "create_exadata_compartment" {
+    description = "Whether to create a dedicated Exadata compartment under the Sandbox compartment."
+    type        = bool
+    default     = false
+}

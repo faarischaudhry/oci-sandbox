@@ -27,3 +27,10 @@ resource "oci_identity_compartment" "database" {
     name           = "Database"
     description    = "For all database resources"
 }
+
+resource "oci_identity_compartment" "exadata" {
+    count          = var.create_exadata_compartment ? 1 : 0
+    compartment_id = oci_identity_compartment.sandbox.id
+    name           = "Exadata"
+    description    = "For all Exadata infrastructure, VM clusters, and associated resources"
+}

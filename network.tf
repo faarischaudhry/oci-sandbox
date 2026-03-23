@@ -63,7 +63,7 @@ resource "oci_core_security_list" "public_security_list" {
     	protocol    = "all"
   	}
   	ingress_security_rules {
-    	protocol = "6" # TCP
+    	protocol = "6" 
     	source   = "0.0.0.0/0"
     	tcp_options {
       		min = 22
@@ -135,5 +135,62 @@ resource "oci_core_subnet" "private_subnet_2" {
   	prohibit_public_ip_on_vnic = true
   	route_table_id             = oci_core_route_table.private_route_table.id
   	security_list_ids          = [oci_core_security_list.private_security_list.id]
+  	availability_domain        = var.availability_domain
+}
+
+resource "oci_core_security_list" "exadata_security_list" {
+	count          = var.create_exadata_subnets ? 1 : 0
+	compartment_id = oci_identity_compartment.network.id
+	vcn_id         = oci_core_vcn.main_vcn.id
+	display_name   = "exadata-security-list"
+
+	egress_security_rules {
+		destination = "0.0.0.0/0"
+		protocol    = "all"
+	}
+
+	ingress_security_rules {
+		protocol = "6"
+		source   = var.vcn_cidr_blocks[0]
+		tcp_options {
+		min = 1521
+		max = 1522
+		}
+	}
+
+	ingress_security_rules {
+		protocol = "all"
+		source   = var.exadata_client_subnet_cidr
+	}
+
+	ingress_security_rules {
+		protocol = "all"
+		source   = var.exadata_backup_subnet_cidr
+	}
+}
+
+resource "oci_core_subnet" "exadata_client_subnet" {
+  	count                      = var.create_exadata_subnets ? 1 : 0
+  	compartment_id             = oci_identity_compartment.network.id
+  	vcn_id                     = oci_core_vcn.main_vcn.id
+  	cidr_block                 = var.exadata_client_subnet_cidr
+  	display_name               = "exadata-client-subnet"
+  	dns_label                  = "exaclient"
+  	prohibit_public_ip_on_vnic = true
+  	route_table_id             = oci_core_route_table.private_route_table.id
+  	security_list_ids          = [oci_core_security_list.exadata_security_list[0].id]
+  	availability_domain        = var.availability_domain
+}
+
+resource "oci_core_subnet" "exadata_backup_subnet" {
+  	count                      = var.create_exadata_subnets ? 1 : 0
+  	compartment_id             = oci_identity_compartment.network.id
+  	vcn_id                     = oci_core_vcn.main_vcn.id
+  	cidr_block                 = var.exadata_backup_subnet_cidr
+  	display_name               = "exadata-backup-subnet"
+  	dns_label                  = "exabackup"
+  	prohibit_public_ip_on_vnic = true
+  	route_table_id             = oci_core_route_table.private_route_table.id
+  	security_list_ids          = [oci_core_security_list.exadata_security_list[0].id]
   	availability_domain        = var.availability_domain
 }
