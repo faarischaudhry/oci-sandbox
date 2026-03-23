@@ -74,20 +74,14 @@ variable "group_names" {
     default     = [ "Team1", "Team2" ] 
 }
 
-/*
-variable "create_exadata_compartment" {
-    description = "Whether to create Exadata compartment or not"
+variable "create_internet_gateway" {
+    description = "Whether to create an Internet Gateway. Set to false when routing traffic through a Hub VCN via DRG."
     type        = bool
-    default     = false
+    default     = true
 }
 
-variable "exadata_client_cidr" {
-    description = "CIDR Block for Exadata Subnet"
-    type        = string
+variable "create_nat_gateway" {
+    description = "Whether to create a NAT Gateway. Set to false when routing traffic through a Hub VCN via DRG."
+    type        = bool
+    default     = true
 }
-
-variable "exadata_backup_cidr" {
-    description = "CIDR Block for Client Subnet"
-    type        = string 
-}
-*/
