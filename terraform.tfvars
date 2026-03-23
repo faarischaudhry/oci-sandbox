@@ -24,4 +24,4 @@ namespace = "value"
 
 domain_name = "domain-1"
 
-group_names = [ "Team1", "Team2" ]
+group_names = [ "TeamA", "TeamB" ]
