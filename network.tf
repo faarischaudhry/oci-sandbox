@@ -138,35 +138,173 @@ resource "oci_core_subnet" "private_subnet_2" {
   	availability_domain        = var.availability_domain
 }
 
-resource "oci_core_security_list" "exadata_security_list" {
+resource "oci_core_security_list" "exadata_client_security_list" {
+	count          = var.create_exadata_subnets ? 1 : 0
+	compartment_id = oci_identity_compartment.network.id
+	vcn_id         = oci_core_vcn.main_vcn.id
+	display_name   = "exadata-client-security-list"
+
+
+# General Rules
+
+   # Allows SSH traffic from anywhere
+  ingress_security_rules{
+  # allowing all sorce port range by omission
+    protocol = "6" #TCP
+    stateless = false
+    source_type ="CIDR_BLOCK"
+    source = "0.0.0.0/0"
+    tcp_options {
+      min = 22
+      max = 22
+    }
+    description = "Allow SSH Traffic from Anywhere"
+  }
+
+  # Allows Path MTU Discovery fragmentation messages
+  ingress_security_rules {
+    stateless = false
+    protocol = "1" #ICMP
+    source_type = "CIDR_BLOCK"
+    source = "0.0.0.0/0"
+    icmp_options{
+      type = 3
+      code = 4 
+    }
+    descritpion = "Allow Path MTU Discovery fragmentation messages"
+  }
+  
+  #Allow connectivity error messages within the VCN   
+  ingress_security_rules {
+    stateless = false
+    protocol = "1" #ICMP
+    source_type = "CIDR_BLOCK"
+    source = var.exadata_client_subnet_cidr
+
+    # allow all codes/types for ICMP by omission
+    description = "Allow connectivity error messages within the VCN"   
+  }
+
+  #Allow all egress traffic
+  egress_security rules {
+    stateless = false
+    destination_type = "CIDR_BLOCK"
+    destination = "0.0.0.0/0"
+    protocol = "All" # give it all
+    
+  }
+#Client Specific
+
+  # Client Specific (CS) Allows ONS and FAN Traffic with the Client Subnet
+  ingress_security_rules {
+    stateless = false
+    source_type = "CIDR_BLOCK"
+    source = var.exadata_client_subnet_cidr
+    protocol = "6" # TCP
+    # allowing all source ports by omission
+    tcp_options {
+      min = 6200
+      max = 6200
+    }
+    description = "The first rule is recommended and enables the Oracle Notification Services (ONS) to communicate about Fast Application Notification (FAN) events."
+  }
+
+  # CS Allows SQL*NET Traffic from within the client subnet
+  ingress_security_rules {
+    stateless = false
+    source_type = "CIDR_BLOCK"
+    source = var.exadata_client_subnet_cidr
+    # allow all source ports by omission
+    tcp_options {
+      min = 1521
+      max = 1521
+    }
+    desccription = "SQL*NET Traffic for client connections to DB or Oracle Data Guard"
+  }
+
+  # CS Allow SSH TCP Traffic inside the client subnet
+  egress_security_rules {
+    stateless = false
+    destination_type = "CIDR_BLOCK"
+    destination = "0.0.0.0/0"
+    protocol = "6" #TCP
+    # allow all source ports by omission
+    tcp_options {
+      min = 22
+      max = 22
+    }
+    description = "Allow SSH TCP Traffic inside the client subnet"
+  }
+
+  # CS Allow all egress traffic (allows connection to the Oracle YUM Repos)
+  egress_security_rules {
+    stateless = false
+    destination_type = "CIDR_BLOCK"
+    destination = "0.0.0.0/0"
+    protocol = "all"
+
+    description = "The first rule is recommended and enables the Oracle Notification Services (ONS) to communicate about Fast Application Notification (FAN) events."
+  }
+
+  
+  
+  
+}
+
+resource "oci_core_security_list" "exadata__backup_security_list" {
 	count          = var.create_exadata_subnets ? 1 : 0
 	compartment_id = oci_identity_compartment.network.id
 	vcn_id         = oci_core_vcn.main_vcn.id
 	display_name   = "exadata-security-list"
+# General Rules
 
-	egress_security_rules {
-		destination = "0.0.0.0/0"
-		protocol    = "all"
-	}
+   # Allows SSH traffic from anywhere
+  ingress_security_rules{
+  # allowing all sorce port range by omission
+    protocol = "6" #TCP
+    stateless = false
+    source_type ="CIDR_BLOCK"
+    source = "0.0.0.0/0"
+    tcp_options {
+      min = 22
+      max = 22
+    }
+    description = "Allow SSH Traffic from Anywhere"
+  }
 
-	ingress_security_rules {
-		protocol = "6"
-		source   = var.vcn_cidr_blocks[0]
-		tcp_options {
-		min = 1521
-		max = 1522
-		}
-	}
+  # Allows Path MTU Discovery fragmentation messages
+  ingress_security_rules {
+    stateless = false
+    protocol = "1" #ICMP
+    source_type = "CIDR_BLOCK"
+    source = "0.0.0.0/0"
+    icmp_options{
+      type = 3
+      code = 4 
+    }
+    descritpion = "Allow Path MTU Discovery fragmentation messages"
+  }
+  
+  #Allow connectivity error messages within the VCN   
+  ingress_security_rules {
+    stateless = false
+    protocol = "1" #ICMP
+    source_type = "CIDR_BLOCK"
+    source = var.exadata_backup_subnet_cidr
 
-	ingress_security_rules {
-		protocol = "all"
-		source   = var.exadata_client_subnet_cidr
-	}
+    # allow all codes/types for ICMP by omission
+    description = "Allow connectivity error messages within the VCN"   
+  }
 
-	ingress_security_rules {
-		protocol = "all"
-		source   = var.exadata_backup_subnet_cidr
-	}
+  #Allow all egress traffic
+  egress_security rules {
+    stateless = false
+    destination_type = "CIDR_BLOCK"
+    destination = "0.0.0.0/0"
+    protocol = "All" # give it all
+    
+  }
+
 }
 
 resource "oci_core_subnet" "exadata_client_subnet" {
