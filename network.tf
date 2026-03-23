@@ -186,7 +186,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
   }
 
   #Allow all egress traffic
-  egress_security rules {
+  egress_security_rules {
     stateless = false
     destination_type = "CIDR_BLOCK"
     destination = "0.0.0.0/0"
