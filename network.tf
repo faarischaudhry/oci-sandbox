@@ -171,7 +171,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
       type = 3
       code = 4 
     }
-    descritpion = "Allow Path MTU Discovery fragmentation messages"
+    description = "Allow Path MTU Discovery fragmentation messages"
   }
   
   #Allow connectivity error messages within the VCN   
@@ -186,7 +186,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
   }
 
   #Allow all egress traffic
-  egress_security rules {
+  egress_security_rules {
     stateless = false
     destination_type = "CIDR_BLOCK"
     destination = "0.0.0.0/0"
@@ -219,7 +219,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
       min = 1521
       max = 1521
     }
-    desccription = "SQL*NET Traffic for client connections to DB or Oracle Data Guard"
+    description = "SQL*NET Traffic for client connections to DB or Oracle Data Guard"
   }
 
   # CS Allow SSH TCP Traffic inside the client subnet
@@ -282,7 +282,7 @@ resource "oci_core_security_list" "exadata__backup_security_list" {
       type = 3
       code = 4 
     }
-    descritpion = "Allow Path MTU Discovery fragmentation messages"
+    description = "Allow Path MTU Discovery fragmentation messages"
   }
   
   #Allow connectivity error messages within the VCN   
@@ -297,7 +297,7 @@ resource "oci_core_security_list" "exadata__backup_security_list" {
   }
 
   #Allow all egress traffic
-  egress_security rules {
+  egress_security_rules {
     stateless = false
     destination_type = "CIDR_BLOCK"
     destination = "0.0.0.0/0"
