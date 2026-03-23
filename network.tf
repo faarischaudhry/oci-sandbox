@@ -214,6 +214,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
     stateless = false
     source_type = "CIDR_BLOCK"
     source = var.exadata_client_subnet_cidr
+    protocol = "6" # TCP
     # allow all source ports by omission
     tcp_options {
       min = 1521
@@ -282,7 +283,7 @@ resource "oci_core_security_list" "exadata__backup_security_list" {
       type = 3
       code = 4 
     }
-    descritpion = "Allow Path MTU Discovery fragmentation messages"
+    description = "Allow Path MTU Discovery fragmentation messages"
   }
   
   #Allow connectivity error messages within the VCN   
