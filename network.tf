@@ -317,7 +317,7 @@ resource "oci_core_subnet" "exadata_client_subnet" {
   	dns_label                  = "exaclient"
   	prohibit_public_ip_on_vnic = true
   	route_table_id             = oci_core_route_table.private_route_table.id
-  	security_list_ids          = [oci_core_security_list.exadata_security_list[0].id]
+  	security_list_ids          = [oci_core_security_list.exadata_client_security_list[0].id]
   	availability_domain        = var.availability_domain
 }
 
@@ -330,6 +330,6 @@ resource "oci_core_subnet" "exadata_backup_subnet" {
   	dns_label                  = "exabackup"
   	prohibit_public_ip_on_vnic = true
   	route_table_id             = oci_core_route_table.private_route_table.id
-  	security_list_ids          = [oci_core_security_list.exadata_security_list[0].id]
+  	security_list_ids          = [oci_core_security_list.exadata_backup_security_list[0].id]
   	availability_domain        = var.availability_domain
 }
