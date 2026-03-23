@@ -20,17 +20,3 @@ resource "oci_identity_domains_group" "groups" {
     schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
     display_name = each.value
 }
-
-/*
-resource "oci_identity_domains_group" "team1" {
-    idcs_endpoint = data.oci_identity_domain.existing_domain.url
-    schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
-    display_name = "Team1"
-}
-
-resource "oci_identity_domains_group" "team2" {
-    idcs_endpoint = data.oci_identity_domain.existing_domain.url
-    schemas = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
-    display_name = "Team2"
-}
-*/
