@@ -214,6 +214,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
     stateless = false
     source_type = "CIDR_BLOCK"
     source = var.exadata_client_subnet_cidr
+    protocol = "6" # TCP
     # allow all source ports by omission
     tcp_options {
       min = 1521
