@@ -248,7 +248,7 @@ resource "oci_core_security_list" "exadata_client_security_list" {
   }  
 }
 
-resource "oci_core_security_list" "exadata__backup_security_list" {
+resource "oci_core_security_list" "exadata_backup_security_list" {
 	count          = var.create_exadata_subnets ? 1 : 0
 	compartment_id = oci_identity_compartment.network.id
 	vcn_id         = oci_core_vcn.main_vcn.id
