@@ -581,22 +581,19 @@ locals {
   }
 }
 
-resource "oci_events_rule" "service_rules"{
-  for_each=local.oci_services
+resource "oci_events_rule" "service_rules" {
+  for_each = local.oci_services
 
-  compartment_id="ocid1.compartment.oc1..aaaaaaaa2ipyqhgat7gbkiqsqniivd4smro7n4xh4qfgq7hu5phwtjpij44q"
-  display_name="Event Rule ${each.key}"
-  description="this where the events are"
-  is_enabled=true
+  compartment_id = oci_identity_compartment.security.id
+  display_name = each.value.display_name
+  is_enabled = true
+  condition = each.value.condition
 
-  condition=each.value.condition
-  actions
-    {actions
-      {action_type="ONS"
-      is_enabled=true
-      topic_id=oci_ons_notification_topic.test_notification_topic.id
-      description = "${each.key} event"
-      }
+  actions {
+    actions {
+      action_type = "ONS"
+      is_enabled = true
+      topic_id = oci_ons_notification_topic.test_notification_topic.id
+    }
   }
-  
 }
