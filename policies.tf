@@ -35,18 +35,32 @@ resource "oci_identity_policy" "basicTenancyPermissions" {
 }
 
 # Test Policy
-resource "oci_identity_policy" "test" {
+resource "oci_identity_policy" "test1" {
     for_each = local.team_groups_upper
 
     compartment_id = oci_identity_compartment.appdev.id
     description = "Policies for ${each.key} to manage/read resources in AppDev compartment"
-    name = "${each.key}TestPolicies"
+    name = "${each.key}Test1Policies"
     statements = [
         "allow group ${local.domain_name}/${each.key} manage instance-family in compartment ${local.app_compartment_name} where request.permission = 'INSTANCE_CREATE'",
-        "allow any-user to manage instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'"    ]
+        "allow any-user to manage instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'"    
+    ]
 
     depends_on = [oci_identity_domains_group.groups]
 }
+
+resource "oci_identity_policy" "test2" {
+    for_each = local.team_groups_upper
+
+    compartment_id = oci_identity_compartment.database.id
+    description = "Policies for ${each.key} to manage/read resources in Database compartment"
+    name = "${each.key}Test2Policies"
+    statements = [
+        "allow any-user to manage instance-family in compartment ${local.database_compartment_name} where request.principal.group.tag.team.name = '${each.value}'"   
+    ]
+
+    depends_on = [oci_identity_domains_group.groups]
+}   
 
 # Team 1 Policies
 
