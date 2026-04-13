@@ -28,7 +28,7 @@ resource "oci_identity_policy" "basicTenancyPermissions" {
         "allow group '${local.domain_name}'/'${each.key}' to read usage-budgets in compartment ${local.sandbox_compartment_name}",
         "allow group '${local.domain_name}'/'${each.key}' to read usage-reports in compartment ${local.sandbox_compartment_name}",
         "allow group '${local.domain_name}'/'${each.key}' to read objectstorage-namespaces in compartment ${local.sandbox_compartment_name}",
-        "allow group '${local.domain_name}'/'${each.key}' to read tag-namespaces in compartment ${local.sandbox_compartment_name}",
+        "allow group '${local.domain_name}'/'${each.key}' to use tag-namespaces in compartment ${local.sandbox_compartment_name}",
     ]
 
     depends_on = [oci_identity_domains_group.groups]
@@ -42,7 +42,7 @@ resource "oci_identity_policy" "test1" {
     description = "Policies for ${each.key} to manage/read resources in AppDev compartment"
     name = "${each.key}Test1Policies"
     statements = [
-        "allow group ${local.domain_name}/${each.key} manage instance-family in compartment ${local.app_compartment_name} where request.permission = 'INSTANCE_CREATE'",
+        "allow group ${local.domain_name}/${each.key} to manage instance-family in compartment ${local.app_compartment_name} where request.permission = 'INSTANCE_CREATE'",
         "allow any-user to manage instance-family in compartment ${local.app_compartment_name} where target.resource.tag.team.name = '${each.value}'"    
     ]
 
